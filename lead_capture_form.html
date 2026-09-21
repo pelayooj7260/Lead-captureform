@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tell us what you're looking for</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c2b3a;
+      --ink-soft: #4a5a6a;
+      --paper: #f6f4ee;
+      --paper-line: #e2ddd0;
+      --brass: #a9822f;
+      --brass-light: #cfa94f;
+      --white: #ffffff;
+      --error: #b3432b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Public Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background-image:
+        linear-gradient(var(--paper-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+      background-size: 48px 48px;
+      background-position: -1px -1px;
+    }
+
+    .card {
+      background: var(--white);
+      max-width: 560px;
+      width: 100%;
+      border: 1px solid var(--paper-line);
+      box-shadow: 0 1px 2px rgba(28, 43, 58, 0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--brass), var(--brass-light));
+    }
+
+    .card-inner {
+      padding: 48px 44px 40px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brass);
+      font-weight: 600;
+      margin: 0 0 14px;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-optical-sizing: auto;
+      font-weight: 500;
+      font-size: 32px;
+      line-height: 1.2;
+      margin: 0 0 10px;
+      color: var(--ink);
+    }
+
+    .sub {
+      font-size: 15px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin: 0 0 34px;
+      max-width: 44ch;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .row {
+      display: flex;
+      gap: 14px;
+    }
+
+    .row .field {
+      flex: 1;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+
+    input,
+    select,
+    textarea {
+      font-family: 'Public Sans', sans-serif;
+      font-size: 15px;
+      padding: 11px 13px;
+      border: 1px solid #d5d0c2;
+      background: var(--paper);
+      color: var(--ink);
+      border-radius: 3px;
+      outline: none;
+      transition: border-color .15s ease, background .15s ease;
+      width: 100%;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--brass);
+      background: var(--white);
+    }
+
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--brass);
+      outline-offset: 2px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 76px;
+      font-family: inherit;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%234a5a6a' stroke-width='1.6' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    button {
+      margin-top: 8px;
+      background: var(--ink);
+      color: var(--white);
+      border: none;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Public Sans', sans-serif;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background .15s ease, transform .1s ease;
+    }
+
+    button:hover {
+      background: #14202c;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: default;
+    }
+
+    .note {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    .status {
+      display: none;
+      font-size: 14px;
+      padding: 12px 14px;
+      border-radius: 3px;
+      margin-top: 6px;
+    }
+
+    .status.error {
+      display: block;
+      background: #fbeceb;
+      color: var(--error);
+      border: 1px solid #f0c9c4;
+    }
+
+    .success-view {
+      display: none;
+      text-align: center;
+      padding: 20px 4px 6px;
+    }
+
+    .success-view.show {
+      display: block;
+    }
+
+    .success-view .mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .success-view h2 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 24px;
+      margin: 0 0 10px;
+    }
+
+    .success-view p {
+      color: var(--ink-soft);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin: 0;
+      max-width: 38ch;
+      margin: 0 auto;
+    }
+
+    form.hide {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <div class="card-inner">
+
+      <div id="formView">
+        <p class="eyebrow">Property search</p>
+        <h1>Tell us what you're looking for</h1>
+        <p class="sub">Two minutes, and we'll follow up with a short confirmation of everything you told us — no generic
+          form-letter reply.</p>
+
+        <form id="leadForm">
+          <div class="row">
+            <div class="field">
+              <label for="firstName">First name</label>
+              <input type="text" id="firstName" name="FirstName" required autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label for="lastName">Last name</label>
+              <input type="text" id="lastName" name="LastName" required autocomplete="family-name">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="Email" required autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="Phone" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="area">Area of interest</label>
+            <input type="text" id="area" name="Area" placeholder="e.g. Rancho Cucamonga, Upland" required>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="priceRange">Price range</label>
+              <select id="priceRange" name="PriceRange" required>
+                <option value="" disabled selected>Select a range</option>
+                <option>Under $350K</option>
+                <option>$350K–$450K</option>
+                <option>$450K–$550K</option>
+                <option>$550K–$650K</option>
+                <option>$650K–$800K</option>
+                <option>$800K+</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="timeline">Timeline</label>
+              <select id="timeline" name="Timeline" required>
+                <option value="" disabled selected>Select a timeline</option>
+                <option>Just browsing</option>
+                <option>Within 3 months</option>
+                <option>3–6 months</option>
+                <option>6–12 months</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="notes">Anything else we should know?</label>
+            <textarea id="notes" name="Notes"
+              placeholder="School district, must-haves, deal breakers — whatever's on your mind."></textarea>
+          </div>
+
+          <button type="submit" id="submitBtn">Submit</button>
+          <div class="status error" id="statusBox"></div>
+          <p class="note">We'll only use this to follow up about your search.</p>
+        </form>
+      </div>
+
+      <div class="success-view" id="successView">
+        <div class="mark">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10.5L8 14.5L16 5.5" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </div>
+        <h2>Got it, thanks.</h2>
+        <p>Check your inbox in the next few minutes — we'll send a quick confirmation of what you shared so you can
+          double check we've got it right.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Replace this with your actual n8n Production webhook URL from Workflow A
+    const WEBHOOK_URL = "https://app.ojpnetwork.com/webhook/ojp-survey-intake";
+
+    const form = document.getElementById('leadForm');
+    const statusBox = document.getElementById('statusBox');
+    const submitBtn = document.getElementById('submitBtn');
+    const formView = document.getElementById('formView');
+    const successView = document.getElementById('successView');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusBox.classList.remove('error');
+      statusBox.textContent = '';
+
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!res.ok) throw new Error('Request failed');
+
+        successView.classList.add('show');
+        form.classList.add('hide');
+      } catch (err) {
+        statusBox.textContent = "Something didn't go through. Mind trying again in a moment?";
+        statusBox.classList.add('error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+      }
+    });
+  </script>
+
+</body>
+
+</html>
